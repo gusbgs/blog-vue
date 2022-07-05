@@ -11,11 +11,9 @@ export default function usePosts() {
   const fetchPosts = async () => {
     let response = await axios.get('api/post')
     posts.value = response.data.data
-    console.log(response)
   }
   // mengambil detail data post berdasarkan slug
   const fetchPost = async (slug) => {
-    console.log(slug)
     let response = await axios.get(`api/post/${slug}`)
     post.value = response.data.data
   }

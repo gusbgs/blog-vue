@@ -8,16 +8,16 @@
       <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
       <tr>
         <th scope="col" class="px-6 py-3">
-          Product name
+          Title
         </th>
         <th scope="col" class="px-6 py-3">
-          Color
+          Body
         </th>
         <th scope="col" class="px-6 py-3">
-          Category
+          Teaser
         </th>
         <th scope="col" class="px-6 py-3">
-          Price
+          Status Publish
         </th>
         <th scope="col" class="px-6 py-3">
           <span class="sr-only">Edit</span>
@@ -29,8 +29,7 @@
         <th scope="row" class="px-6 py-4 font-medium text-gray-900 dark:text-white whitespace-nowrap">
           {{post.title}}
         </th>
-        <td class="px-6 py-4">
-          {{post.body}}
+        <td class="px-6 py-4" v-html="post.body">
         </td>
         <td class="px-6 py-4">
           {{post.teaser}}
@@ -38,7 +37,7 @@
         <td class="px-6 py-4">
           <span :class="[post.published == true ? 'bg-blue-100 text-blue-800' : 'bg-red-100 text-red-500']" class=" text-sm font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-blue-200 dark:text-blue-800"> {{post.published ? 'Published' : 'Unpublished'}}</span>
         </td>
-        <td class="px-6 py-4 text-right flex justify-between">
+        <td class="px-6 py-4 text-right flex justify-between gap-4">
           <a href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline" @click="showData(post)">Show</a>
           <a href="#" class="font-medium text-warning-500 dark:text-blue-500 hover:underline" @click="edit(post.slug)">Edit</a>
           <a href="#" class="font-medium text-red-500 dark:text-blue-500 hover:underline">Delete</a>
@@ -48,31 +47,31 @@
     </table>
   </div>
 
-  <el-table :data="posts" border style="width: 100%" class="mt-5">
-    <el-table-column prop="title" label="title" width="180" />
-    <el-table-column  label="body" width="200">
-      <template #default="scope">
-          <p v-html="scope.row.body"></p>
-      </template>
-    </el-table-column>
-    <el-table-column prop="teaser" label="teaser" />
-    <el-table-column prop="published" label="published" width="150" >
-      <template #default="scope">
-        <el-tag
-          :type="scope.row.published == true ? 'success' : 'danger'"
-          disable-transitions
-        >{{ scope.row.published ? 'Published' : 'Unpublished' }}</el-tag
-        >
-      </template>
-    </el-table-column>
-    <el-table-column prop="slug" label="Action" width="200">
-      <template #default="scope">
-        <el-button type="warning" class="mb-5" @click="edit(scope.row.slug)">Edit</el-button>
-        <el-button type="primary" class="mb-5">Show</el-button>
-        <el-button type="secondary" class="mb-5">Delete</el-button>
-      </template>
-    </el-table-column>
-  </el-table>
+<!--  <el-table :data="posts" border style="width: 100%" class="mt-5">-->
+<!--    <el-table-column prop="title" label="title" width="180" />-->
+<!--    <el-table-column  label="body" width="200">-->
+<!--      <template #default="scope">-->
+<!--          <p v-html="scope.row.body"></p>-->
+<!--      </template>-->
+<!--    </el-table-column>-->
+<!--    <el-table-column prop="teaser" label="teaser" />-->
+<!--    <el-table-column prop="published" label="published" width="150" >-->
+<!--      <template #default="scope">-->
+<!--        <el-tag-->
+<!--          :type="scope.row.published == true ? 'success' : 'danger'"-->
+<!--          disable-transitions-->
+<!--        >{{ scope.row.published ? 'Published' : 'Unpublished' }}</el-tag-->
+<!--        >-->
+<!--      </template>-->
+<!--    </el-table-column>-->
+<!--    <el-table-column prop="slug" label="Action" width="200">-->
+<!--      <template #default="scope">-->
+<!--        <el-button type="warning" class="mb-5" @click="edit(scope.row.slug)">Edit</el-button>-->
+<!--        <el-button type="primary" class="mb-5">Show</el-button>-->
+<!--        <el-button type="secondary" class="mb-5">Delete</el-button>-->
+<!--      </template>-->
+<!--    </el-table-column>-->
+<!--  </el-table>-->
   <el-dialog v-model="dialogFormVisible" title="Shipping address">
     <el-form :model="form">
       <el-form-item label="Promotion name" :label-width="formLabelWidth">
