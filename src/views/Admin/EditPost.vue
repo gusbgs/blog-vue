@@ -60,7 +60,6 @@ export default {
     onMounted(async () => {
       await editPost(props.slug)
 
-
       watch(() => _.cloneDeep(posts), _.debounce(()=> {
         ubahDataPost()
       }, 500))

@@ -38,6 +38,7 @@
           <span :class="[post.published == true ? 'bg-blue-100 text-blue-800' : 'bg-red-100 text-red-500']" class=" text-sm font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-blue-200 dark:text-blue-800"> {{post.published ? 'Published' : 'Unpublished'}}</span>
         </td>
         <td class="px-6 py-4 text-right flex justify-between gap-4">
+          <a href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline" @click="openModalShowComment(post.id)">Detail Comment</a>
           <a href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline" @click="showData(post)">Show</a>
           <a href="#" class="font-medium text-warning-500 dark:text-blue-500 hover:underline" @click="edit(post.slug)">Edit</a>
           <a href="#" class="font-medium text-red-500 dark:text-blue-500 hover:underline">Delete</a>
@@ -72,6 +73,17 @@
 <!--      </template>-->
 <!--    </el-table-column>-->
 <!--  </el-table>-->
+  <KeepAlive>
+    <el-dialog v-model="dialogShowComment" title="Detail Comments">
+      <el-table :data="comments">
+        <el-table-column property="body" label="Comments" width="150" />
+        <el-table-column property="created_at" label="Created At" width="200" />
+        <el-table-column property="updated_at" label="Updated At" />
+      </el-table>
+    </el-dialog>
+
+  </KeepAlive>
+
   <el-dialog v-model="dialogFormVisible" title="Shipping address">
     <el-form :model="form">
       <el-form-item label="Promotion name" :label-width="formLabelWidth">
@@ -101,12 +113,18 @@ import { onMounted, ref } from "vue";
 import { useRouter} from "vue-router"
 export default {
   setup() {
-    const {fetchPosts, posts, createPost} = new PostService()
+    const {fetchPosts, posts, createPost,showComments} = new PostService()
     const router = useRouter()
     const dialogFormVisible = ref(false)
+    const dialogShowComment = ref(false)
     const formLabelWidth = '140px'
     const form = ref()
-
+    const comments = ref([])
+    const openModalShowComment = async (slug) => {
+      let result = await showComments(slug)
+      dialogShowComment.value = true
+      comments.value = result
+    }
     const showData = (data) => {
       dialogFormVisible.value = true
       console.log(form)
@@ -118,7 +136,10 @@ export default {
 
     const newPost = async () => {
       let post = await createPost()
-      router.replace({name : 'admin.posts.edit', params: {slug: post.slug}})
+
+      // Menambahkan data post ke  urutan terakhir dari array posts
+      posts.value.unshift(post)
+      //router.replace({name : 'admin.posts.edit', params: {slug: post.slug}})
     }
 
     // Ketika halaman ini diload maka fetch post / ambil data dari composeable
@@ -126,7 +147,7 @@ export default {
     onMounted(()=> {
       fetchPosts(), console.log(dialogFormVisible)
     })
-    return { posts, newPost, edit, dialogFormVisible, form,showData,formLabelWidth};
+    return { comments,posts, newPost, edit, dialogFormVisible, form,showData,formLabelWidth,openModalShowComment,dialogShowComment};
   },
 };
 </script>
